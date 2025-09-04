@@ -34,3 +34,47 @@ k - first packed dimension: [3:0] (0 to 3)
 
 l - second packed dimension: [7:0] (0 to 7)
 
+
+
+
+bit [4:0][5:0][7:0] array[4:0][3:0][6:0];
+
+Unpacked dimensions (after name): [4:0][3:0][6:0]
+
+These define the grid size with 3 dimensions:
+
+[4:0] = 5 rows (row index 0 to 4)
+[3:0] = 4 columns (column index 0 to 3)
+[6:0] = 7 depth layers (like layers stacked in depth)
+
+So your grid is 5 (rows) × 4 (columns) × 7 (depth layers)
+Packed dimensions (before name): [4:0][5:0][7:0]
+
+These define the shape of the data stored at each grid location:
+
+[4:0] = 5 groups (outer packed dimension)
+[5:0] = 6 groups (middle packed dimension)
+[7:0] = 8 bits per group (innermost packed dimension)
+
+So each element stores a block of 5 × 6 × 8 = 240 bits
+
+They are accesed in order 
+array[row][col][depth][group1][group2][bit_index]
+group1↓\group2→	     0	            1	       2	       3	       4	       5
+0	              (8bits)	(8bits)	(8bits)	(8bits)	(8bits)	(8bits)
+1	              (8bits)	(8bits)	(8bits)	(8bits)	(8bits)	(8bits)
+2	              (8bits)	(8bits)	(8bits)	(8bits)	(8bits)	(8bits)
+3	              (8bits)	(8bits)	(8bits)	(8bits)	(8bits)	(8bits)
+4	              (8bits)	(8bits)	(8bits)	(8bits)	(8bits)	(8bits)
+
+
+
+this represents 1 cell of 240 bits
+
+Rows ↓ \ Columns →	Col0	              Col1	              Col2	              Col3
+Row0, Depth0	       Cell (240 bits)	Cell (240 bits)	Cell (240 bits)	Cell (240 bits)
+Row1, Depth0	       Cell (240 bits)	Cell (240 bits)	Cell (240 bits)	Cell (240 bits)
+...	...	...	...	...
+Row4, Depth0	       Cell (240 bits)	Cell (240 bits)	Cell (240 bits)	Cell (240 bits)
+
+similary we have 7 stacks depth
